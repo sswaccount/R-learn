@@ -1,0 +1,36 @@
+---
+title: "ggplot"
+author: "ssw"
+date: "2024-06-04"
+output: html_document
+---
+
+### 安装数据分析包
+
+![](img/tidyverse.png)
+
+```{r}
+# install.packages("tidyverse")
+
+library("tidyverse")
+
+# tidyverse_conflicts() ──
+# ✖ dplyr::filter() masks stats::filter()
+# ✖ dplyr::lag()    masks stats::lag()
+# ℹ Use the conflicted package to force all conflicts to become errors
+# Modify Chunk OptionsRun All Chunks AboveRun Current Chunk
+```
+
+#### 冲突的产生以及处理
+
+```{r}
+# install.packages("conflicted")
+library(conflicted)
+library("stats")
+
+# 设置冲突处理策略
+conflicted::conflict_prefer("filter", "dplyr")
+conflicted::conflict_prefer("lag", "dplyr")
+```
+
+处理冲突

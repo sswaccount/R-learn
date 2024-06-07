@@ -1,0 +1,327 @@
+---
+title: "R Basic and Data Structures"
+author: "ssw"
+date: "2024-06-04"
+output: html_document
+---
+
+### R Markdown(Rmd)使用
+
+基于`markdown`文档格式，允许将`R`代码、文本、公式、图表结合在文档中的高校工具，适用数据分析报告、调研、数据可视化研究等。
+
+#### 安装
+
+``` r
+install.packages("rmarkdown")
+```
+
+#### 创建
+
+`file` 菜单下 `new file` -\> `R Markdown`
+
+#### 基本信息
+
+基本的`R Markdown`文件由三部分组成：
+
+-   `YAML` 头部：包含元信息(metadata)包含标题、作者、输出格式等
+
+-   文本内容：使用`Markdown`编写的文本内容
+
+-   R代码块：分为两类
+
+    -   不可执行代码块：```` ```r ````
+
+    -   可执行代码块：```` ```{r} ````
+
+#### 作用
+
+学习语言结构或生成报告事半功倍
+
+### R语言纲要
+
+下载`R`以及`RStudio`的关系：
+
+-   `R`语言是统计计算以及图形绘制的核心工具
+
+-   `RStudio`是`R`的集成开发环境`(IDE,Integrated Developing Environment)`
+
+面向对象：高阶语言的特性，可以理解为变量`variable`不是单独存在的，像是一种结构，提供了装数据的位置以及为数据提供操作的函数，但使用起来像变量一样
+
+创建对象以及使用的过程：
+
+```{r}
+# object <- data
+# 赋值操作符： <- 
+# win : 'alt' + '-'
+# mac : 'option' + '-'
+my_obj <- 10
+my_obj
+```
+
+变量命名规则：正常就好，但是不能使用数字或特殊符号开头，借助下划线
+
+对象属性使用：
+
+-   `typeof()`：返回对象类型
+
+-   `length()`：返回对象长度
+
+```{r}
+typeof(my_obj)
+length(my_obj)
+```
+
+#### 基本数据类型
+
+-   数值
+
+    ```{r}
+    int_num <- 1L
+    double_num <- 1.2
+    ```
+
+-   字符
+
+    ```{r}
+    s <- "123"
+    s <- '123'
+    ```
+
+-   逻辑
+
+    ```{r}
+    t <- TRUE
+    t <- FALSE
+    ```
+
+#### 基本数据结构
+
+-   `vector`
+
+    存储上述三类信息的一维`array`，执行函数`c()`可创建`vector`
+
+    注意：
+
+    -   `vector`存储数据类型应一致
+
+    -   数据的访问下标由`1`开始，同样可以传入索引序列返回对应位置的子`vector`
+
+        -   下标访问从1开始索引
+
+        -   
+
+    ```{r}
+
+    # c()
+    a <- c(1, 2, 5, 3, 6, -2, 4)
+    b <- c("one", "two", "three")
+    c <- c(TRUE, TRUE, TRUE, FALSE, TRUE, FALSE)
+
+    a <- c("k", "j", "h", "a", "c", "m")
+    # 下标访问从1开始索引
+    a[3]
+
+    a[c(1, 3, 5)]
+    a[2:6]
+    ```
+
+-   `matrix`
+
+    二维`array`，同样遵循上述`vector`规则，一般使用格式为：
+
+    ```{r}
+    # 使用格式
+    # myymatrix <- matrix(vector,
+    #                     nrow=number_of_rows,
+    #                     ncol=number_of_columns,
+    #                     byrow=logical_value,
+    #                     dimnames=
+    #                       list(char_vector_rowname,
+    #                            char_vector_colnames))
+    y <- matrix(1:20, nrow=5, ncol=4, byrow = TRUE, )
+
+    y
+
+    # 不使用缺省参数
+    cells    <- 1:4
+    rnames   <- c("R1", "R2")
+    cnames   <- c("C1", "C2")
+    mymatrix <- matrix(cells, 
+                       nrow=2, 
+                       ncol=2, 
+                       byrow=TRUE,
+                       dimnames=list(rnames, cnames))
+
+    mymatrix
+
+    x <- matrix(1:10, nrow=2)
+    x
+
+    x[, 2]
+    x[1, 4]
+    x[1, c(4,5)]
+    ```
+
+-   `array`
+
+    与`matrix`类似，但是维度可以大于2，数组可通过array函数创建，形式如下：
+
+    ```{r}
+    # 创建格式
+    # myarray <- array(vector, dimensions, dimnames)
+
+
+
+    dim1 <- c("A1", "A2")
+    dim2 <- c("B1", "B2", "B3")
+    dim3 <- c("C1", "C2", "C3", "C4")
+    z <- array(1:24, c(2, 3, 4), dimnames=list(dim1, dim2, dim3))
+    z
+    z[1,2,3]
+    ```
+
+-   `data frame`
+
+    由于不同的列可以包含不同模式（数值型、字符型等）的数据，数据框的概念较矩阵来说更为一般，数据框将是你在R中最常处理的数据结构
+
+    ```{r}
+    # 创建格式
+    # mydata <- data.frame(col1, col2, col3,...)
+
+    patientID <- c(1, 2, 3, 4)
+    age <- c(25, 34, 28, 52)
+    diabetes <- c("Type1", "Type2", "Type1", "Type1")
+    status <- c("Poor", "Improved", "Excellent", "Poor")
+    patientdata <- data.frame(patientID, age, diabetes, status)
+
+    patientdata
+
+    patientdata[1:2]
+
+    patientdata[c("diabetes", "status")]
+
+    patientdata$age
+
+    table(patientdata$patientID, patientdata$age)
+
+    plot(patientdata$patientID, patientdata$age)
+    ```
+
+-   `factor`
+
+    变量可归结为名义型、有序型或连续型变量，类别（名义型）变量和有序类别（有序型）变量在R中称为因子（factor）。因子在R中非常重要，因为它决定了数据的分析方式以及如何进行视觉呈现。
+
+    ```{r}
+    diabetes <- c("Type1", "Type2", "Type1", "Type1")
+
+    diabetes <- factor(diabetes)
+
+    diabetes
+
+    status <- c("Poor", "Improved", "Excellent", "Poor")
+
+    status <- factor(status, ordered=TRUE)
+
+    status
+
+    status <- factor(status, 
+                     order=TRUE,
+                     levels=c("Poor", "Improved", "Excellent"))
+    ```
+
+    ```{r}
+    patientID <- c(1, 2, 3, 4)
+    age <- c(25, 34, 28, 52)
+    diabetes <- c("Type1", "Type2", "Type1", "Type1")
+    status <- c("Poor", "Improved", "Excellent", "Poor")
+    diabetes <- factor(diabetes)
+    status <- factor(status, order=TRUE)
+    patientdata <- data.frame(patientID, age, diabetes, status)
+
+    str(patientdata)
+
+    summary(patientdata)
+    ```
+
+-   `list`
+
+    ```{r}
+    # mylist <- list(object1, object2, ...)
+    # mylist <- list(name1=object1, name2=object2, ...)
+    g <- "My First List"
+    h <- c(25, 26, 18, 39)
+    j <- matrix(1:10, nrow=5)
+    k <- c("one", "two", "three")
+    mylist <- list(title=g, ages=h, j, k)
+    mylist
+
+    mylist[[2]]
+
+    mylist[["ages"]]
+    ```
+
+注意：
+
+-   对象名称中的句点`.`没有特殊意义，但美元符号`$`却有着和其他语言中的句点 类似的含义，即指定一个数据框或列表中的某些部分。例如，A\$x是指数据框A中的变 量x。
+-   R不提供多行注释或块注释功能。你必须以#作为多行注释每行的开始。出于调试目的， 你也可以把想让解释器忽略的代码放到语句if(FALSE){... }中。将FALSE改为TRUE 即允许这块代码执行。
+-   将一个值赋给某个向量、矩阵、数组或列表中一个不存在的元素时，R将自动扩展这个 数据结构以容纳新值。举例来说，考虑以下代码： \> x \<- c(8, 6, 4) \> x[7] \<- 10 \> x [1] 8 6 4 NA NA NA 10 通过赋值，向量x由三个元素扩展到了七个元素。x \<- x[1:3]会重新将其缩减回三个 元素。
+-   R中没有标量。标量以单元素向量的形式出现。
+-   R中的下标不从0开始，而从1开始。在上述向量中，x[1]的值为8。
+-   变量无法被声明。它们在首次被赋值时生成。
+
+#### 运算符以及向量运算
+
+-   算数运算符
+
+-   循环补齐
+
+-   关系运算符
+
+-   逻辑运算符
+
+-   其他运算符
+
+<!-- -->
+
+-   特殊值
+
+    -   `Inf`，是**Infinity**的简写，表示无限大；`-Inf`表示无限小
+
+    -   `NaN`，是**Not a Number**的简写，表示这个数字没有数学定义
+
+    -   `NA`，是**Not available**的简写，表示缺失状态
+
+    -   `NULL`，是**No value**的意思，表示没有值，或者空值的意思，表示变量实际上没有任何值，或者甚至不存在。
+
+    ```{r}
+    # Inf
+    1/0
+    # NaN
+    0/0
+    # NA
+    c(1, NA, 3)
+    # NULL
+    c()
+    ```
+
+-   关系运算符
+
+-   逻辑运算符
+
+    ```{r}
+    a <- c(TRUE, FALSE, FALSE)
+    b <- c(FALSE, TRUE, FALSE)
+    a | b
+    a & b
+    ```
+
+-   其他运算符
+
+    ```{r}
+    a <- 1:10
+    b <- seq(from = 1, to = 10, by = 1)
+    identical(a, b)
+    class(a)
+    class(b)
+
+    ```
