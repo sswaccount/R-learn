@@ -52,7 +52,9 @@ conflicted::conflict_prefer("lag","dplyr")
 Q：数据结构类型为？
 
 ```{r}
-ggplot2::mpg
+# 命名空间::自身的函数
+a <- ggplot2::mpg
+a
 
 ?mpg
 ```
@@ -72,7 +74,7 @@ ggplot2::mpg
     -   `parameter`：参数名
 
 ```{r}
-ggplot(data = mpg) + 
+ggplot(data = mpg)+ 
   geom_point(mapping = aes(x = displ, y = hwy))
 ```
 
@@ -89,14 +91,19 @@ ggplot(data = mpg) +
 
 ```{r}
 # (1)运行 ggplot(data = mpg)，你会看到什么？
-
+ggplot(data = mpg)
 # (2) 数据集 mpg 中有多少行？多少列？
-
+nrow(mpg)
+ncol(mpg)
 # (3) 变量 drv 的意义是什么？使用 ?mpg 命令阅读帮助文件以找出答案。
-
+?mpg
 # (4) 使用 hwy 和 cyl 绘制一张散点图。
+ggplot(data = mpg) +
+  geom_point(mapping = aes(x=hwy, y=cyl))
 
 # (5) 如果使用 class 和 drv 绘制散点图，会发生什么情况？为什么这张图没什么用处？
+ggplot(data = mpg) +
+  geom_point(mapping = aes(x=class, y=cyl))
 ```
 
 #### 图形的其他属性映射
@@ -155,7 +162,7 @@ ggplot(data = mpg) +
 # (1) 以下这段代码有什么错误？为什么点不是蓝色的？
 ggplot(data = mpg) +
   geom_point(
-    mapping = aes(x = displ, y = hwy, color = "blue")
+    mapping = aes(x = displ, y = hwy, color = 'blue')
   )
 
 # (2) mpg 中的哪些变量是分类变量？哪些变量是连续变量？（提示：输入 ?mpg 来阅读这个数据集的文档。）当调用 mpg 时，如何才能看到这些信息？
@@ -172,7 +179,7 @@ ggplot(data = mpg) +
 
 #### 分面数据
 
-对于离散变量利用其成为图像属性，分割为多个分面，分别显示数据子集的子图，对单个变量使用分面即使用函数`facet_warp()`，比较特别的是第一个参数即为分面的变量：
+对于离散变量利用其成为图像属性，分割为多个分面，分别显示数据子集的子图(`subplots`)，对单个变量使用分面即使用函数`facet_warp()`，比较特别的是第一个参数即为分面的变量：
 
 ```{r}
 ggplot(data = mpg) +
@@ -182,7 +189,7 @@ ggplot(data = mpg) +
 # 对多个变量进行分面
 ggplot(data = mpg) +
   geom_point(mapping = aes(x = displ, y = hwy)) +
-    facet_grid(. ~ cyl)
+    facet_grid(class ~ cyl)
 
 ?facet_wrap
 ```
@@ -191,6 +198,9 @@ ggplot(data = mpg) +
 
 ```{r}
 #(1) 如果使用连续变量进行分面，会发生什么情况？
+ggplot(data = mpg) +
+  geom_point(mapping = aes(x = displ, y = hwy)) +
+    facet_wrap(~ displ, nrow = 2)
 
 #(2) 在使用 facet_grid(drv ~ cyl) 生成的图中，空白单元的意义是什么？它们和以下代码生成的图有什么关系？
 ggplot(data = mpg) +
@@ -217,17 +227,16 @@ ggplot(data = mpg) +
 
 ```
 
-#### 几何对象
+#### 几何对象函数
 
 上部分讨论的内容基本包含的都是关于数据信息的映射关系，该部分着重分析图像的呈现形式
 
 ```{r}
-# 左图
 ggplot(data = mpg) +
-geom_point(mapping = aes(x = displ, y = hwy))
-# 右图
+  geom_point(mapping = aes(x = displ, y = hwy))
 ggplot(data = mpg) +
-geom_smooth(mapping = aes(x = displ, y = hwy))
+  geom_smooth(mapping = aes(x = displ, y = hwy))
+
 ```
 
 上述映射关系在此处不一定同时适用，比如点的形状在此处设置线的形状显得不合理，但可以设置线型如
