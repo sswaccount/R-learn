@@ -92,14 +92,16 @@ ggplot(data = mpg)+
 ```{r}
 # (1)运行 ggplot(data = mpg)，你会看到什么？
 ggplot(data = mpg)
+# 创建图层
+
 # (2) 数据集 mpg 中有多少行？多少列？
 nrow(mpg)
 ncol(mpg)
 # (3) 变量 drv 的意义是什么？使用 ?mpg 命令阅读帮助文件以找出答案。
 ?mpg
 # (4) 使用 hwy 和 cyl 绘制一张散点图。
-ggplot(data = mpg) +
-  geom_point(mapping = aes(x=hwy, y=cyl))
+# ggplot(data = mpg) +
+geom_point(mapping = aes(x=hwy, y=cyl))
 
 # (5) 如果使用 class 和 drv 绘制散点图，会发生什么情况？为什么这张图没什么用处？
 ggplot(data = mpg) +
@@ -162,20 +164,41 @@ ggplot(data = mpg) +
 # (1) 以下这段代码有什么错误？为什么点不是蓝色的？
 ggplot(data = mpg) +
   geom_point(
-    mapping = aes(x = displ, y = hwy, color = 'blue')
+    mapping = aes(x = displ, y = hwy), 
+    color = 'blue'
   )
 
 # (2) mpg 中的哪些变量是分类变量？哪些变量是连续变量？（提示：输入 ?mpg 来阅读这个数据集的文档。）当调用 mpg 时，如何才能看到这些信息？
 
+mpg
+# legend 
 # (3) 将一个连续变量映射为 color、size 和 shape。对分类变量和连续变量来说，这些图形属性的表现有什么不同？
+ggplot(data = mpg) +
+  geom_point(mapping = aes(x = displ, y = hwy, color = model))
 
 # (4) 如果将同一个变量映射为多个图形属性，会发生什么情况？
+ggplot(data = mpg) +
+  geom_point(mapping = aes(x = displ, y = hwy, 
+                           color = class, 
+                           size = class,
+                           shape = class))
 
 # (5) stroke 这个图形属性的作用是什么？它适用于哪些形状？（提示：使用 ?geom_point 命令。）
+?geom_point()
+ggplot(data = mpg) +
+  geom_point(mapping = aes(x = displ, y = hwy,
+                           stroke = 5,
+                           size = 5)
+             )
 
 # (6) 如果将图形属性映射为非变量名对象，比如 aes(color = displ < 5)，会发生什么情况？
-
+ggplot(data = mpg) +
+  geom_point(mapping = aes(x = displ, y = hwy,
+                           color = displ > 5 | displ < 3)
+             )
 ```
+
+\
 
 #### 分面数据
 
@@ -237,6 +260,7 @@ ggplot(data = mpg) +
 ggplot(data = mpg) +
   geom_smooth(mapping = aes(x = displ, y = hwy))
 
+?geom_smooth()
 ```
 
 上述映射关系在此处不一定同时适用，比如点的形状在此处设置线的形状显得不合理，但可以设置线型如

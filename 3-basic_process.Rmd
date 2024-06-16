@@ -1,0 +1,235 @@
+---
+title:"dplyr"
+author:"ssw"
+date:"2024-06-15"
+output:html_document
+---
+
+### 流程控制：判断、循环、函数
+
+#### 判断
+
+```{r}
+# if-else
+x <- var
+if(x < 0){
+ print("(, 0)") 
+}else if(x < 10){
+ print("[0, 10)")
+}else{
+ print("[10,)")
+}
+
+# 
+model <- x
+if(class(model) == "linear"){
+  
+}else{
+  
+}
+
+a <-matrix(1:4, nrow = 2)
+output <- class(a)
+typeof(output)
+
+# 二分类 ifelse
+y <- -5
+answer <- ifelse(y > 0, "正数", "非正数")
+answer
+```
+
+#### 循环
+
+```{r}
+# 类型一致：vector matrix df
+# 类型不一致：list
+# 1. for
+for(i in 1:5){
+  print(i)
+}
+# 2. while
+i <- 1
+while(i < 5){
+  print(i)
+  i <- i + 1
+}
+# repeat
+```
+
+```{r}
+# 计算向量的平方和
+vec <- c(1, 2, 3, 4, 5)
+ans <- 0
+
+for(i in vec){
+  ans <- ans + i ^ 2
+}
+
+print(ans)
+
+# 如何交换两个数字的值(运用中间变量)
+a <- 2
+b <- 3
+
+ans <- a
+a <- b
+b <- ans
+
+print(a)
+print(b)
+```
+
+#### 函数
+
+```{r}
+# 复用性
+pre_process <- function(date, data){
+  if(date <= "20240615"){
+    
+  }else{
+    
+  }
+  
+  return(process_data)
+}
+
+
+#func <- function(data){
+#  ggplot(data = <DATA>) + 
+#    <GEO_FUNCTION>(mapping = aes(<MAPPINGS>))
+#  return()
+#}
+
+x <- c(1, 2, 3, 4, 1)
+max(x)
+min(x)
+mean(x)
+sd(x)
+sum(x)
+
+log(exp(2))
+
+# 偏函数 
+log10_x <- log(8, base = 2)
+log10_x
+
+sort(x)
+unique(x)
+
+quantile(x)
+```
+
+### 问题
+
+```{r}
+#func <- function(params){
+#  return()
+#}
+
+# 1.实现加法（func）
+add <- function(param_1, param_2){
+  ans <-  param_1 + param_2
+  return(ans)
+}
+
+a <- 1
+b <- 2
+
+ans <- add(a, b)
+
+# 2. 实现归一化normalization（func）
+x <- c(1, 2, 3, 4, 1)
+
+normalization <- function(data, addtion){
+  ans = (data - min(data)) / (max(data) - min(data))
+  return(ans)
+}
+
+normalization(x)
+
+# 3. 返回某向量内大于某值（func）
+x <- c(1, 2, 3, 4, 1)
+
+func <- function(data, target){
+  idx <- data > target
+  ans <- data[idx]
+  return(ans)
+} 
+
+func(x, target = 2)
+
+# 4. 方差
+
+
+my_var <- function(data){
+  # 获取数据长度
+  len <- length(data)
+  # 获取数据均值
+  mu <- mean(data)
+  ans <- sum((data - mu) ^ 2) / (len - 1)
+  return(ans)
+} 
+
+check_equal <- function(value_1, value_2){
+  if(abs(value_1 - value_2) < 1e-9){
+    return(TRUE)
+  }
+  return(FALSE)
+}
+
+# 数据对拍，至少对比100次var my_var 结果是不是一样的
+func <- function(seed=123, epochs=123, size=100, range=10000){
+  set.seed(seed)
+  i <- 1
+  for(i in 1:epochs){
+    x <- sample(1:range, size=size, replace = TRUE)
+    std_ans <- var(x)
+    my_ans <- my_var(x)
+    if(!check_equal(std_ans, my_ans)){
+      return(FALSE)
+    }
+  }
+  return(TRUE)
+}
+
+func()
+
+x <- 1:10
+x[x %% 2 == 0]
+```
+
+归一化`normalization`
+
+$$
+\frac{x_i - \min(x)}{\max(x) - \min(x)}
+$$
+
+方差`var`
+
+$$
+\frac{1}{n-1}\sum_{i=1}^{n}(x_i-\mu)^2
+$$
+
+### 增强型的`dataframe`
+
+```{r}
+library("tidyverse")
+# 选取单行或单列，都能返回tibble类型的数据
+tb <- tibble::tibble(
+  x=1:4,
+  y=2:5,
+  z=c('a', 'b', 'c', 'd')
+)
+# 切片访问？
+tb[2:3, 'x']
+# data$     vec
+# data[]    tibble
+# data[[]]  vec
+
+df <- data.frame(
+  x=1:4,
+  y=2:5,
+  z=c('a', 'b', 'c', 'd')
+)
+df[1, 'x']
+```
