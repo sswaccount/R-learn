@@ -1,0 +1,202 @@
+### 作业
+
+#### 求最大公约数
+
+```{r}
+
+gcd <- function(a, b){
+  if(b == 0){
+    return(a)
+  }
+  return(gcd(b, a %% b))
+}
+
+add <- function(a, b){
+  # 返回值
+  return(a + b)
+}
+
+gcd(2, 5)
+
+# 斐波那契数列
+# 1 1 2 3 5 8 13
+feb <- function(n){
+  if(n <= 2){
+    return(1)
+  }
+  return(feb(n - 1) + feb(n - 2))
+}
+
+feb(40)
+```
+
+#### 列求和
+
+```{r}
+df <- data.frame(
+  A = c(1, 2, 3),
+  B = c(4, 5, 6),
+  C = c(7, 8, 9)
+)
+
+columns_names <-  c('A', 'C')
+
+# 打包/封装
+sum_colnames <- function(df, names){
+  return(sum_columns(df, columns_names))
+}
+
+
+```
+
+#### 统计字符串中的字母数量
+
+```{r}
+
+# func_name <- function(params){
+#   body
+#   return(value)
+# }
+
+count_letters <- function(str){
+  letter_counts <- integer(26)
+  
+  str <- tolower(str)
+  # 遍历字母
+  for(char in str){
+    if(char >= 'a' && char <= 'z'){
+      # 下标需要做一定的处理
+      letter_counts[idx] <- letter_counts[idx] + 1
+    }
+  }
+  print(letter_counts)
+  return(setNames(letter_counts, letters))
+}
+
+
+str <- "hh, Hello World!@"
+count_letters(str)
+
+
+# 正则表达式
+
+```
+
+### 时间/空间复杂度
+
+基础算法会很严格，了解时间优化，时间复杂度描述：
+
+-   线性级别的 $O(n)$
+
+-   根号级别的 $O(\sqrt{n})$
+
+-   对数级别的 $O(\log{n})$
+
+### ASCII和正则表达式
+
+```{r}
+'1'
+```
+
+#### 基本概念
+
+字符串匹配的库
+
+1.  字符类：
+
+    字母、数字、...
+
+2.  特殊字符：
+
+    单字符、开始结束
+
+3.  重复限定符：
+
+4.  转义：
+
+5.  逻辑操作：
+
+#### 正则库
+
+```{r}
+# grep(pattern, x, ...)
+words <- c("apple", "banana", "orange", "grape", "Apricot")
+idx <- grep("[p]", words)
+print(words[idx])
+
+
+# gsub(pattern, replacement, x, ...)
+text <- "Today is 2024-06-30, tomorrow is 2024-07-01."
+# YYYY-MM-DD
+result <- gsub("\\d{4}-\\d{2}-\\d{2}", "YYYY-MM-DD", text)
+print(result)
+```
+
+### 统计学习方法：
+
+#### 分类（classic）、回归（拟合fit）
+
+#### 感知机：二分类的线性分类模型
+
+$$
+y = W^TX+b \quad W\in R^{n\times1}\\
+y = w_1x_1+b \\
+y = w_1x_1 + w_2x_2+b\\
+$$
+
+损失函数：使用梯度下降的概念去优化值，（选择合理的优化器去梯度下降）
+
+```{r}
+# 创造数据集
+data <- data.frame(
+  x1 = rnorm(100),
+  x2 = rnorm(100)
+)
+data
+data$y <- ifelse(data$x1 + data$x2 > 0.5, 1, -1)
+
+# 画点图
+library(ggplot2)
+
+ggplot(data) + 
+  geom_point(aes(x=x1, y=x2, color=factor(y))) +
+  theme_light()
+
+# 训练
+perceptron <- function(data, lr = 0.01, n_iter = 100){
+  # 初始化权重参数
+  w <- 0
+  b <- 0
+  # 开始迭代
+  for(i in 1:n_iter){
+    # 针对每个点
+    for(j in 1:nrow(data)){
+      # 当前权重对应的label是什么
+      x <- as.numeric(data[j, 1:(ncol(data) - 1)])
+      y <- data$y[j]
+      y_hat = ifelse(w * x + b > 0, 1, -1)
+      # 判断是否需要更新权重
+      if(y != y_hat){
+        w <- w + lr * y * x
+        b <- b + lr * y
+      }
+    }
+  }
+}
+
+perceptron(data)
+# 训练的时候观察错误率看模型结果
+# 参数训练好之后->预测
+# 
+```
+
+数据科学：维度不一致（类型）
+
+### 数据科学竞赛玩法：
+
+1.  选择你喜欢的或者匹配的问题（分类/回归、监督/非监督、机器学习/深度学习）
+2.  原始数据（数据清洗：不均衡、可视化）
+3.  选择模型（感知机、聚类、序列...）
+4.  匹配模型的输入，训练（选择合理的优化器....）
+5.  多试试
+6.  产出一个好结果
